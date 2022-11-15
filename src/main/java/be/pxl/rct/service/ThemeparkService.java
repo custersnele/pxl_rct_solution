@@ -4,6 +4,7 @@ import be.pxl.rct.attraction.AttractionType;
 import be.pxl.rct.attraction.RollerCoaster;
 import be.pxl.rct.engine.RollercoasterMapper;
 import be.pxl.rct.exception.UnsufficientCashException;
+import be.pxl.rct.shop.ShopType;
 import be.pxl.rct.themepark.Themepark;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Attr;
@@ -51,4 +52,7 @@ public class ThemeparkService {
         themepark.addAttraction(name, attractionType, entree);
     }
 
+    public void addShop(ShopType shopType, String shopName) {
+        themepark.addShop(shopName, shopType);
+    }
 }

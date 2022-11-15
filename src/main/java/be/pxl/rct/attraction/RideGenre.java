@@ -1,6 +1,6 @@
 package be.pxl.rct.attraction;
 
-public enum AttractionGenre {
+public enum RideGenre {
     WATER_RIDE,
     ROLLER_COASTER,
     GENTLE_RIDE,

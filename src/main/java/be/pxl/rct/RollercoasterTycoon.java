@@ -6,7 +6,7 @@ import be.pxl.rct.engine.GameEngine;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class ThemeparkApp {
+public class RollercoasterTycoon {
 
     public static void main(String[] args) throws IOException {
         Scanner keyboard = new Scanner(System.in);

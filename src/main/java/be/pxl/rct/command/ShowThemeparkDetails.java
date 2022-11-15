@@ -13,7 +13,7 @@ public class ShowThemeparkDetails implements Command<String> {
     }
     @Override
     public void execute(String data) {
-        themeparkService.getThemepark().showVisitorDetails();
+        themeparkService.getThemepark().printDetails();
 
     }
 }

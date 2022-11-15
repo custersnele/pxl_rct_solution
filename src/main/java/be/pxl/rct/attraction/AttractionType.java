@@ -3,7 +3,7 @@ package be.pxl.rct.attraction;
 public class AttractionType {
     private int id;
     private String type;
-    private AttractionGenre genre;
+    private RideGenre genre;
     private Specification excitement;
     private Specification nausea;
     private double cost;
@@ -27,11 +27,11 @@ public class AttractionType {
         this.type = type;
     }
 
-    public AttractionGenre getGenre() {
+    public RideGenre getGenre() {
         return genre;
     }
 
-    public void setGenre(AttractionGenre genre) {
+    public void setGenre(RideGenre genre) {
         this.genre = genre;
     }
 

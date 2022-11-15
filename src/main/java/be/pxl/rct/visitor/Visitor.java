@@ -5,13 +5,15 @@ import be.pxl.rct.exception.NoCashException;
 import be.pxl.rct.themepark.Themepark;
 
 import java.util.Optional;
+import java.util.Random;
 
 public class Visitor extends Thread {
+    private static final Random RANDOM = new Random();
     private int age;
     private String firstname;
     private double cashAvailable;
     private double cashSpent;
-    private boolean hungery;
+    private boolean hungry;
     private boolean thirty;
     private boolean inWaitingLine;
     private int happinessLevel;
@@ -52,12 +54,12 @@ public class Visitor extends Thread {
         this.cashSpent = cashSpent;
     }
 
-    public boolean isHungery() {
-        return hungery;
+    public boolean isHungry() {
+        return hungry;
     }
 
-    public void setHungery(boolean hungery) {
-        this.hungery = hungery;
+    public void setHungry(boolean hungry) {
+        this.hungry = hungry;
     }
 
     public boolean isThirty() {
@@ -81,7 +83,7 @@ public class Visitor extends Thread {
         while (System.currentTimeMillis() < threadEndTime) {
             // Step 1: if in queue wait and get thirsty or hungry
             happinessLevel -= 1;
-            if (!isInWaitingLine()) {
+            if (!isInWaitingLine() && Math.random() < 0.7) {
                 // if hungry -> go eat
                 // if thirsty -> find drink
                 Optional<RollerCoaster> rollercoaster = themepark.findRollercoaster(this);
@@ -116,7 +118,7 @@ public class Visitor extends Thread {
                 "age=" + age +
                 ", firstname='" + firstname + '\'' +
                 ", cashAvailable=" + cashAvailable +
-                ", hungery=" + hungery +
+                ", hungery=" + hungry +
                 ", thirty=" + thirty +
                 ", happinessLevel=" + happinessLevel +
                 '}';

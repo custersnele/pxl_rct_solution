@@ -23,8 +23,8 @@ public class CreateVisitorsTask implements Runnable {
 
     @Override
     public void run() {
-        //themepark.open();
         long endTime = System.currentTimeMillis() + oneDayInMillis;
+        themepark.open(endTime);
         while (System.currentTimeMillis() < endTime) {
             Visitor visitor = visitorFactory.createVisitor();
             // TODO create logging mechanism for threads
@@ -32,7 +32,7 @@ public class CreateVisitorsTask implements Runnable {
             // start visitor for a given time > 1 min and < tijd dat pretpark nog open is
             themepark.addVisitor(visitor);
             try {
-                Thread.sleep(RANDOM.nextInt(30));
+                Thread.sleep(RANDOM.nextInt(100));
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
