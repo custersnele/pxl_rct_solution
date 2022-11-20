@@ -1,20 +1,19 @@
 package be.pxl.rct.command;
 
-import be.pxl.rct.attraction.AttractionType;
-import be.pxl.rct.attraction.RollerCoaster;
+import be.pxl.rct.attraction.RollercoasterType;
 import be.pxl.rct.exception.InvalidCommandException;
-import be.pxl.rct.service.ThemeparkService;
+import be.pxl.rct.themepark.Themepark;
 
-import java.util.Scanner;
+import java.util.List;
 
 public class AddAttractionCommand implements Command<String> {
 
-    private ThemeparkService themeparkService;
-    private Scanner scanner;
+    private Themepark themepark;
+    private List<RollercoasterType> attractionTypes;
 
-    public AddAttractionCommand(ThemeparkService themeparkService, Scanner scanner) {
-        this.themeparkService = themeparkService;
-        this.scanner = scanner;
+    public AddAttractionCommand(Themepark themepark, List<RollercoasterType> attractionTypes) {
+        this.themepark = themepark;
+        this.attractionTypes = attractionTypes;
     }
 
     @Override
@@ -27,12 +26,12 @@ public class AddAttractionCommand implements Command<String> {
             if (attractionName.isEmpty()) {
                 throw new InvalidCommandException("New attraction should have a name.");
             }
-            AttractionType attractionType = themeparkService.getAttractionTypes().stream()
+            RollercoasterType attractionType = attractionTypes.stream()
                     .filter(a -> a.getId() == attractionTypeId)
                     .findAny()
                     .orElseThrow(() -> new InvalidCommandException("No attraction type with id [" + attractionTypeId + "]"));
             // TODO entree fee of attraction
-            themeparkService.addAttraction(attractionType, attractionName, 5);
+            themepark.addAttraction(attractionName, attractionType);
         } catch (NumberFormatException e) {
             System.out.println("Give the id of the type of attraction.");
         }

@@ -1,6 +1,8 @@
 package be.pxl.rct.attraction;
 
-public class AttractionType {
+import java.io.Serializable;
+
+public class RollercoasterType implements Serializable {
     private int id;
     private String type;
     private RideGenre genre;
@@ -88,11 +90,16 @@ public class AttractionType {
                 '}';
     }
 
-    public String stringFewDetails() {
+    public String getBasicDetails() {
+        return type + ", " + genre;
+    }
+
+    public String getDetails() {
         return "[" + id + "] " + type + " " + genre + " " + cost;
     }
 
-    public String stringAllDetails() {
+    public String getAllDetails() {
         return "[" + id + "] " + type + " " + genre +  " E: " + excitement + " N: " + nausea + " " +  cost;
     }
+
 }

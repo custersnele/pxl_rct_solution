@@ -1,6 +1,8 @@
 package be.pxl.rct.attraction;
 
-public class Specification {
+import java.io.Serializable;
+
+public class Specification implements Serializable {
     private double value;
     private Rating rating;
 

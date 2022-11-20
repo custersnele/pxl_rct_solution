@@ -14,7 +14,6 @@ public class VisitorFactory {
         visitor.setFirstname(FAKER.name().firstName());
         int age = (int) (Math.abs(RANDOM.nextGaussian()) * 99);
         visitor.setAge(age);
-        visitor.setHappinessLevel(100);
         visitor.setCashAvailable(RANDOM.nextInt(2500));
         return visitor;
     }

@@ -25,6 +25,10 @@ public enum ShopType {
         this.itemType = itemType;
     }
 
+    public ItemType getItemType() {
+        return itemType;
+    }
+
     public double getPricePerItem() {
         return pricePerItem;
     }

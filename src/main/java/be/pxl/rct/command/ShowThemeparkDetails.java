@@ -1,19 +1,19 @@
 package be.pxl.rct.command;
 
-import be.pxl.rct.service.ThemeparkService;
+
+import be.pxl.rct.themepark.Themepark;
 
 import java.util.Scanner;
 
 public class ShowThemeparkDetails implements Command<String> {
-    private ThemeparkService themeparkService;
-    private Scanner scanner;
+    private Themepark themepark;
 
-    public ShowThemeparkDetails(ThemeparkService themeparkService) {
-        this.themeparkService = themeparkService;
+    public ShowThemeparkDetails(Themepark themepark) {
+        this.themepark = themepark;
     }
     @Override
     public void execute(String data) {
-        themeparkService.getThemepark().printDetails();
+        themepark.printDetails();
 
     }
 }

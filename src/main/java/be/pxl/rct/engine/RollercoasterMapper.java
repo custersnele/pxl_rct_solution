@@ -1,15 +1,15 @@
 package be.pxl.rct.engine;
 
 import be.pxl.rct.attraction.RideGenre;
-import be.pxl.rct.attraction.AttractionType;
+import be.pxl.rct.attraction.RollercoasterType;
 import be.pxl.rct.attraction.Rating;
 import be.pxl.rct.attraction.Specification;
 
 public class RollercoasterMapper {
 
-    public static AttractionType map(String line) {
+    public static RollercoasterType map(String line) {
         String[] data = line.split(";");
-        AttractionType attractionType = new AttractionType();
+        RollercoasterType attractionType = new RollercoasterType();
         attractionType.setId(Integer.parseInt(data[0]));
         attractionType.setType(data[1]);
         attractionType.setGenre(RideGenre.valueOf(data[2].replace(" ", "_").toUpperCase()));

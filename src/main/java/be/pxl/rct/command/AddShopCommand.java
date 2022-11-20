@@ -1,22 +1,15 @@
 package be.pxl.rct.command;
 
-import be.pxl.rct.attraction.AttractionType;
 import be.pxl.rct.exception.InvalidCommandException;
-import be.pxl.rct.service.ThemeparkService;
 import be.pxl.rct.shop.ShopType;
 import be.pxl.rct.themepark.Themepark;
 
-import java.util.Scanner;
-
 public class AddShopCommand implements Command<String> {
 
-    private Themepark themepark;
-    private ThemeparkService themeparkService;
-    private Scanner scanner;
+    private final Themepark themepark;
 
-    public AddShopCommand(ThemeparkService themeparkService, Scanner scanner) {
-        this.themeparkService = themeparkService;
-        this.scanner = scanner;
+    public AddShopCommand(Themepark themepark) {
+        this.themepark = themepark;
     }
 
     @Override
@@ -25,11 +18,12 @@ public class AddShopCommand implements Command<String> {
         String[] data = details.split(" ");
         try {
             ShopType shopType = ShopType.valueOf(data[1]);
-            String shopName = details.substring(details.replace("add-shop ", "").indexOf(" ") + 1).trim();
+            String filterName = details.replace("add-shop ", "");
+            String shopName = filterName.substring(filterName.indexOf(" ") + 1).trim();
             if (shopName.isEmpty()) {
                 throw new InvalidCommandException("New shop should have a name.");
             }
-            themeparkService.addShop(shopType, shopName);
+            themepark.addShop(shopName, shopType);
         } catch (NumberFormatException e) {
             throw new InvalidCommandException("Give the id of the type of attraction.");
         } catch (IllegalArgumentException e) {

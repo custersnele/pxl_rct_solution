@@ -1,25 +1,63 @@
 package be.pxl.rct.shop;
 
-import be.pxl.rct.themepark.Themepark;
+import be.pxl.rct.exception.NoCashException;
 import be.pxl.rct.visitor.Visitor;
 
-public class Shop {
+import java.io.Serializable;
+import java.util.concurrent.atomic.AtomicInteger;
+
+public class Shop implements Serializable, Comparable<Shop> {
+    private static final long serialVersionUUID = 1L;
     private String name;
     private ShopType shopType;
-    private Themepark themepark;
+    private AtomicInteger itemsSold = new AtomicInteger();
 
-    public Shop(String name, ShopType shopType, Themepark themepark) {
+    public Shop(String name, ShopType shopType) {
         this.name = name;
         this.shopType = shopType;
-        this.themepark = themepark;
     }
 
-    public void buy(Visitor vistor) {
-        vistor.pay(shopType.getPricePerItem());
-        themepark.addCash(shopType.getProfitPerItem());
+    public boolean sells(ItemType itemType) {
+        return shopType.hasItemType(itemType);
+    }
+
+    public boolean buy(Visitor vistor) {
+        try {
+            vistor.pay(shopType.getPricePerItem());
+            itemsSold.incrementAndGet();
+            return true;
+        } catch (NoCashException e) {
+            return false;
+        }
+    }
+
+    public void open() {
+        itemsSold = new AtomicInteger();
+    }
+
+    public double getProfit() {
+        return getItemsSold() * shopType.getProfitPerItem();
     }
 
     public void showDetails() {
-        System.out.println("*** " + name + " [" + shopType + "]");
+        System.out.println("*** " + toString());
+    }
+
+    public int getItemsSold() {
+        return itemsSold.get();
+    }
+
+    public String getDayDetails() {
+        return name + " [" + shopType + "] Items sold:" + getItemsSold() + " Profit: " + getProfit();
+    }
+
+    @Override
+    public String toString() {
+        return name + " [" + shopType + "]";
+    }
+
+    @Override
+    public int compareTo(Shop shop) {
+        return String.CASE_INSENSITIVE_ORDER.compare(name, shop.name);
     }
 }

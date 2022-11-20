@@ -1,41 +1,38 @@
 package be.pxl.rct.command;
 
+import be.pxl.rct.attraction.RollercoasterType;
 import be.pxl.rct.attraction.RideGenre;
-import be.pxl.rct.attraction.AttractionType;
-import be.pxl.rct.service.ThemeparkService;
 
-import java.util.Scanner;
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class ShowAttractionTypesCommand implements Command<String> {
 
-    private ThemeparkService themeparkService;
-    private Scanner scanner;
+    private List<RollercoasterType> attractionTypes;
 
-    public ShowAttractionTypesCommand(ThemeparkService themeparkService, Scanner scanner) {
-        this.themeparkService = themeparkService;
-        this.scanner = scanner;
+    public ShowAttractionTypesCommand(List<RollercoasterType> attractionTypes) {
+        this.attractionTypes = attractionTypes;
     }
 
     @Override
     public void execute(String filter) {
-         themeparkService.getAttractionTypes().stream()
+         attractionTypes.stream()
                  .filter(createPredicate(filter))
                  .map(displayAttractionType(filter))
                  .forEach(System.out::println);
     }
 
-    private Function<AttractionType, String> displayAttractionType(String filter) {
+    private Function<RollercoasterType, String> displayAttractionType(String filter) {
             if (filter.contains("-all")) {
-                return AttractionType::stringAllDetails;
+                return RollercoasterType::getAllDetails;
             } else {
-                return AttractionType::stringFewDetails;
+                return RollercoasterType::getDetails;
             }
     }
 
 
-    private Predicate<AttractionType> createPredicate(String filter) {
+    private Predicate<RollercoasterType> createPredicate(String filter) {
         String value = filter.substring(filter.indexOf(" ") + 1);
         if (filter.startsWith("-min-cost ")) {
             return a -> a.getCost() >= Integer.parseInt(value);
