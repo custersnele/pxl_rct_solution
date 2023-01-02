@@ -2,17 +2,14 @@ package be.pxl.rct.visitor;
 
 import be.pxl.rct.attraction.RollerCoaster;
 import be.pxl.rct.attraction.WaitingLine;
-import be.pxl.rct.exception.NoCashException;
+import be.pxl.rct.exception.UnsufficientCashException;
 import be.pxl.rct.shop.ItemType;
 import be.pxl.rct.shop.Shop;
-import be.pxl.rct.shop.ShopType;
 import be.pxl.rct.themepark.Themepark;
 
 import java.util.Optional;
-import java.util.Random;
 
 public class Visitor extends Thread {
-    private static final Random RANDOM = new Random();
     private int age;
     private String firstname;
     private double cashAvailable;
@@ -27,6 +24,7 @@ public class Visitor extends Thread {
     private long threadEndTime;
     private long visitStart;
     private long visitEnd;
+    private boolean debug;
 
     private Themepark themepark;
 
@@ -36,6 +34,10 @@ public class Visitor extends Thread {
     public Visitor(String firstname, double cashAvailable) {
         this.firstname = firstname;
         this.cashAvailable = cashAvailable;
+    }
+
+    public void setDebug(boolean debug) {
+        this.debug = debug;
     }
 
     public int getAge() {
@@ -95,13 +97,13 @@ public class Visitor extends Thread {
             // Step 1: if in queue wait and get thirsty or hungry
             hungry = Math.random() < 0.01;
             thirsty = Math.random() < 0.02;
-            happinessLevel -= getHappinessDrop();
+            updateHappiness(getHappinessDrop());
             if (!isInWaitingLine() && Math.random() < 0.7) {
                 // if hungry -> go eat
                 // if thirsty -> find drink
                 Optional<WaitingLine<Visitor>> rollercoaster = themepark.chooseWaitingLine();
                 if (rollercoaster.isEmpty()) {
-                    happinessLevel -= 5;
+                    updateHappiness(-5);
                 } else {
                     rollercoaster.get().enterWaitingLine(this);
                     inWaitingLine = true;
@@ -110,25 +112,25 @@ public class Visitor extends Thread {
             if (!isInWaitingLine() && thirsty && Math.random() < 0.5) {
                 Optional<Shop> shop = themepark.getShop(ItemType.DRINKS);
                 if (shop.isPresent() && shop.get().buy(this)) {
-                    happinessLevel += 10;
+                    updateHappiness(10);
                     thirsty = false;
                 } else {
-                    happinessLevel -= 5;
+                    updateHappiness(-5);
                 }
             }
             if (!isInWaitingLine() && hungry && Math.random() < 0.5) {
                 Optional<Shop> shop = themepark.getShop(ItemType.FOOD);
                 if (shop.isPresent() && shop.get().buy(this)) {
-                    happinessLevel += 10;
+                    updateHappiness(10);
                     hungry = false;
                 } else {
-                    happinessLevel -= 5;
+                    updateHappiness(-5);
                 }
             }
             if (!isInWaitingLine() && Math.random() < 0.1) {
                 Optional<Shop> shop = themepark.getShop(ItemType.SOUVENIR);
                 if (shop.isPresent() && shop.get().buy(this)) {
-                    happinessLevel += 5;
+                    updateHappiness(5);
                 }
             }
 
@@ -142,24 +144,26 @@ public class Visitor extends Thread {
     }
 
     private int getHappinessDrop() {
-        int drop = 1;
+        int drop = -1;
         if (thirsty) {
-            drop++;
+            drop -= 1;
         }
         if (hungry) {
-            drop += 2;
+            drop -= 2;
         }
         return drop;
     }
 
-    public void startVisit(Themepark themepark, int timeInPark) {
+    public void startVisit(Themepark themepark, long endTime) {
         this.themepark = themepark;
         try {
             themepark.payEntranceFee(this);
-            threadEndTime = System.currentTimeMillis() + timeInPark;
+            threadEndTime = endTime;
             start();
-        } catch (NoCashException e) {
-            // WHAT TO DO WITH THIS EXCEPTION
+        } catch (UnsufficientCashException e) {
+            if (debug) {
+                System.out.println(firstname + " cannot visit the park. Not enough cash.");
+            }
         }
     }
 
@@ -176,10 +180,8 @@ public class Visitor extends Thread {
     }
 
     public void pay(double amount) {
-        // TODO test this method
         if (cashAvailable < amount) {
-            // TODO update message
-            throw new NoCashException("Unsuficient cash");
+            throw new UnsufficientCashException();
         }
         cashAvailable -= amount;
         cashSpent += amount;
@@ -189,14 +191,17 @@ public class Visitor extends Thread {
         return inWaitingLine;
     }
 
-    public void takeRide(RollerCoaster rollerCoaster) {
+    public void takeRide() {
         numberOfRides++;
         inWaitingLine = false;
-        updateHappiness(10); // TODO how much increases hapinesslevel? depending on excitement
-        // TODO person becomes sick and goes home
+        updateHappiness(10);
     }
 
     public int getNumberOfRides() {
         return numberOfRides;
+    }
+
+    public long getTimeInPark() {
+        return visitEnd - visitStart;
     }
 }

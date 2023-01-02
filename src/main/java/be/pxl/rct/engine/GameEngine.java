@@ -2,7 +2,7 @@ package be.pxl.rct.engine;
 
 import be.pxl.rct.attraction.RollercoasterType;
 import be.pxl.rct.command.*;
-import be.pxl.rct.engine.task.CreateVisitorsTask;
+import be.pxl.rct.engine.task.SimulateDayThread;
 import be.pxl.rct.exception.InvalidCommandException;
 import be.pxl.rct.themepark.Themepark;
 
@@ -84,8 +84,16 @@ public class GameEngine {
                     break;
                 }
                 case "open": {
-                    CreateVisitorsTask createVisitorsTask = new CreateVisitorsTask(themepark, oneDayInMillis);
-                    new Thread(createVisitorsTask).start();
+                    boolean debug = commandDetails.contains("-debug");
+                    SimulateDayThread simulateDayThread = new SimulateDayThread(themepark, oneDayInMillis, debug);
+                    simulateDayThread.start();
+                    if (debug) {
+                        try {
+                            simulateDayThread.join();
+                        } catch (InterruptedException e) {
+                            System.out.println("SimulateDayThread interrupted.");
+                        }
+                    }
                     break;
                 }
                 case "describe": {

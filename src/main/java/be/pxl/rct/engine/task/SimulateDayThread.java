@@ -1,36 +1,43 @@
 package be.pxl.rct.engine.task;
 
+import be.pxl.rct.exception.RCTException;
 import be.pxl.rct.themepark.Themepark;
 import be.pxl.rct.visitor.Visitor;
 import be.pxl.rct.visitor.VisitorFactory;
 
-import java.io.BufferedWriter;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class CreateVisitorsTask implements Runnable {
+public class SimulateDayThread extends Thread {
     private static final Random RANDOM = new Random();
     private VisitorFactory visitorFactory = new VisitorFactory();
     private Themepark themepark;
     private long oneDayInMillis;
+    private boolean debug;
 
-    public CreateVisitorsTask(Themepark themepark, long oneDayInMillis) {
+    public SimulateDayThread(Themepark themepark, long oneDayInMillis, boolean debug) {
         this.themepark = themepark;
         this.oneDayInMillis = oneDayInMillis;
+        this.debug = debug;
     }
 
     @Override
     public void run() {
         long endTime = System.currentTimeMillis() + oneDayInMillis;
-        themepark.open(endTime);
+        if (debug) {
+            System.out.println(themepark.getName() + " opens");
+        }
+        themepark.open(endTime, debug);
         List<Visitor> visitorsForToday = new ArrayList<>();
         while (System.currentTimeMillis() < endTime) {
             Visitor visitor = visitorFactory.createVisitor();
+            visitor.setDebug(debug);
             // start visitor for a given time > 1 min and < tijd dat pretpark nog open is
             visitorsForToday.add(visitor);
-            visitor.startVisit(themepark, 1000); // TODO change timeInPark
+            long min = Math.min(System.currentTimeMillis() + 1000, endTime - 1);
+            visitor.startVisit(themepark, RANDOM.nextLong(min, endTime));
             try {
                 Thread.sleep(RANDOM.nextInt(100));
             } catch (InterruptedException e) {
@@ -38,7 +45,14 @@ public class CreateVisitorsTask implements Runnable {
             }
         }
         themepark.close();
+        if (debug) {
+            System.out.println(themepark.getName() + " closes");
+        }
 
-        DayStatisticsWriter.writeDayStatistics(Path.of("src/main/resources/logs/"), themepark, visitorsForToday);
+        try {
+            DayStatisticsWriter.writeDayStatistics(Path.of("src/main/resources/logs/"), themepark, visitorsForToday);
+        } catch (RCTException e) {
+            System.out.println("Error writing file with day statistics. " + e.getMessage());
+        }
     }
 }

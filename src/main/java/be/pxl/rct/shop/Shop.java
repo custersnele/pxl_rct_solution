@@ -1,6 +1,6 @@
 package be.pxl.rct.shop;
 
-import be.pxl.rct.exception.NoCashException;
+import be.pxl.rct.exception.UnsufficientCashException;
 import be.pxl.rct.visitor.Visitor;
 
 import java.io.Serializable;
@@ -34,7 +34,7 @@ public class Shop implements Serializable, Comparable<Shop> {
             vistor.pay(shopType.getPricePerItem());
             itemsSold.incrementAndGet();
             return true;
-        } catch (NoCashException e) {
+        } catch (UnsufficientCashException e) {
             return false;
         }
     }

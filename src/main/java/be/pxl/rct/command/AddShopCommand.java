@@ -16,7 +16,7 @@ public class AddShopCommand {
             }
             themepark.addShop(shopName, shopType);
         } catch (IllegalArgumentException e) {
-            throw new InvalidCommandException("Invalid shop type [" + data[1]);
+            throw new InvalidCommandException("Invalid shop type [" + data[1] + "]");
         }
     }
 }

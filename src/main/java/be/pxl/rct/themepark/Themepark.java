@@ -88,12 +88,13 @@ public class Themepark implements Serializable {
         this.entranceFee = entranceFee;
     }
 
-    public void open(long closingTime) {
+    public void open(long closingTime, boolean debug) {
         daysOpen++;
         open = true;
         waitingLines = new ArrayList<>();
         for (RollerCoaster rollerCoaster : rollerCoasters) {
             WaitingLine<Visitor> visitorWaitingLine = new WaitingLine<>(rollerCoaster);
+            visitorWaitingLine.setDebug(debug);
             waitingLines.add(visitorWaitingLine);
             visitorWaitingLine.setClosingTime(closingTime);
             visitorWaitingLine.start();

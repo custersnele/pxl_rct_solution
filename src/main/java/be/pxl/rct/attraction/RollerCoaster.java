@@ -43,7 +43,7 @@ public class RollerCoaster implements Comparable<RollerCoaster>, QueueArea<Visit
 
     @Override
     public void enter(Visitor guest) {
-        guest.takeRide(this);
+        guest.takeRide();
     }
 
     @Override

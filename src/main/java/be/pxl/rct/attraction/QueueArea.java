@@ -17,4 +17,6 @@ public interface QueueArea<Q> {
      * Enter the area you were in line for.
      */
     void enter(Q guest);
+
+    String getName();
 }
