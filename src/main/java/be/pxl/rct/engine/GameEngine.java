@@ -2,7 +2,6 @@ package be.pxl.rct.engine;
 
 import be.pxl.rct.attraction.RollercoasterType;
 import be.pxl.rct.command.*;
-import be.pxl.rct.engine.task.SimulateDayThread;
 import be.pxl.rct.exception.InvalidCommandException;
 import be.pxl.rct.themepark.Themepark;
 
@@ -22,7 +21,7 @@ public class GameEngine {
     private long oneDayInMillis;
     private double initialCash;
     private Path savedThemeparksDir;
-    private List<RollercoasterType> attractionTypes = new ArrayList<>();
+    private final List<RollercoasterType> attractionTypes = new ArrayList<>();
     private boolean running = true;
 
     public void start() {
@@ -126,8 +125,7 @@ public class GameEngine {
                         ObjectOutputStream objectOutputStream = new ObjectOutputStream(Files.newOutputStream(filename));
                         objectOutputStream.writeObject(themepark);
                     } catch (IOException e) {
-                        System.out.println("Error while writing file...");
-                        e.printStackTrace();
+                        throw new InvalidCommandException("Error while writing file...");
                     }
                     break;
                 }
@@ -137,8 +135,7 @@ public class GameEngine {
                         ObjectInputStream objectInputStream = new ObjectInputStream(Files.newInputStream(filename));
                         themepark = (Themepark) objectInputStream.readObject();
                     } catch (IOException | ClassNotFoundException e) {
-                        System.out.println("Error while reading file...");
-                        e.printStackTrace();
+                        throw new InvalidCommandException("Error while reading file...");
                     }
                     break;
                 }

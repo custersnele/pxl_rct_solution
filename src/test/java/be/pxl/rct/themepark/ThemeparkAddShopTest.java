@@ -1,8 +1,5 @@
 package be.pxl.rct.themepark;
 
-import be.pxl.rct.attraction.RideGenre;
-import be.pxl.rct.attraction.RollerCoaster;
-import be.pxl.rct.attraction.RollercoasterType;
 import be.pxl.rct.exception.UnsufficientCashException;
 import be.pxl.rct.shop.Shop;
 import be.pxl.rct.shop.ShopType;

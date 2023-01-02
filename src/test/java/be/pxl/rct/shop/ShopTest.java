@@ -1,7 +1,6 @@
 package be.pxl.rct.shop;
 
 import be.pxl.rct.visitor.Visitor;
-import be.pxl.rct.visitor.VisitorFactory;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,6 +27,15 @@ public class ShopTest {
         double paidByVisitor = ShopType.ICECREAM_STALL.getPricePerItem() * 2;
         assertEquals(paidByVisitor, visitor.getCashSpent());
         assertEquals(500 - paidByVisitor, visitor.getCashAvailable(), 0.01);
+    }
+
+    @Test
+    public void returnsFalseIfVisitorHasUnsufficientCash() {
+        Shop shop = new Shop("test shop", ShopType.ICECREAM_STALL);
+        shop.open();
+        Visitor visitor = new Visitor("v1", 0.5);
+        assertFalse(shop.buy(visitor));
+        assertEquals(0, shop.getItemsSold());
     }
 
     @Test

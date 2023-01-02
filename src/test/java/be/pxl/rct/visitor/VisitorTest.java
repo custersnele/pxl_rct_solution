@@ -1,8 +1,5 @@
 package be.pxl.rct.visitor;
 
-import be.pxl.rct.attraction.RideGenre;
-import be.pxl.rct.attraction.RollerCoaster;
-import be.pxl.rct.attraction.RollercoasterType;
 import be.pxl.rct.exception.UnsufficientCashException;
 import org.junit.jupiter.api.Test;
 

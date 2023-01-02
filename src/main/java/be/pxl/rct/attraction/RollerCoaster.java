@@ -23,7 +23,7 @@ public class RollerCoaster implements Comparable<RollerCoaster>, QueueArea<Visit
     }
 
     public void showDetails() {
-        System.out.println("*** " + toString());
+        System.out.println("*** " + this);
     }
 
     @Override

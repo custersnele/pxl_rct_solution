@@ -1,4 +1,4 @@
-package be.pxl.rct.engine.task;
+package be.pxl.rct.engine;
 
 import be.pxl.rct.exception.RCTException;
 import be.pxl.rct.themepark.Themepark;
@@ -12,10 +12,9 @@ import java.util.Random;
 
 public class SimulateDayThread extends Thread {
     private static final Random RANDOM = new Random();
-    private VisitorFactory visitorFactory = new VisitorFactory();
-    private Themepark themepark;
-    private long oneDayInMillis;
-    private boolean debug;
+    private final Themepark themepark;
+    private final long oneDayInMillis;
+    private final boolean debug;
 
     public SimulateDayThread(Themepark themepark, long oneDayInMillis, boolean debug) {
         this.themepark = themepark;
@@ -32,7 +31,7 @@ public class SimulateDayThread extends Thread {
         themepark.open(endTime, debug);
         List<Visitor> visitorsForToday = new ArrayList<>();
         while (System.currentTimeMillis() < endTime) {
-            Visitor visitor = visitorFactory.createVisitor();
+            Visitor visitor = VisitorFactory.createVisitor();
             visitor.setDebug(debug);
             // start visitor for a given time > 1 min and < tijd dat pretpark nog open is
             visitorsForToday.add(visitor);
@@ -50,7 +49,8 @@ public class SimulateDayThread extends Thread {
         }
 
         try {
-            DayStatisticsWriter.writeDayStatistics(Path.of("src/main/resources/logs/"), themepark, visitorsForToday);
+            DayStatistics dayStatistics = new DayStatistics(themepark, visitorsForToday);
+            dayStatistics.writeToFile(Path.of("src/main/resources/logs/"));
         } catch (RCTException e) {
             System.out.println("Error writing file with day statistics. " + e.getMessage());
         }

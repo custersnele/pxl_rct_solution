@@ -12,20 +12,21 @@ import be.pxl.rct.visitor.Visitor;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
 public class Themepark implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-    private String name;
+    private final String name;
     private double cash;
 
     private double entranceFee;
     private int daysOpen;
     private transient boolean open;
-    private List<RollerCoaster> rollerCoasters = new ArrayList<>();
-    private List<Shop> shops = new ArrayList<>();
+    private final List<RollerCoaster> rollerCoasters = new ArrayList<>();
+    private final List<Shop> shops = new ArrayList<>();
     private transient List<WaitingLine<Visitor>> waitingLines;
 
     public Themepark(String name, double cash) {
@@ -77,7 +78,7 @@ public class Themepark implements Serializable {
     }
 
     public Optional<WaitingLine<Visitor>> chooseWaitingLine() {
-        return waitingLines.stream().min((r1, r2) -> Integer.compare(r1.getWaitingLineSize(), r2.getWaitingLineSize()));
+        return waitingLines.stream().min(Comparator.comparingInt(WaitingLine::getWaitingLineSize));
     }
 
     public List<RollerCoaster> getRollerCoasters() {

@@ -48,7 +48,7 @@ public class Shop implements Serializable, Comparable<Shop> {
     }
 
     public void showDetails() {
-        System.out.println("*** " + toString());
+        System.out.println("*** " + this);
     }
 
     public int getItemsSold() {
