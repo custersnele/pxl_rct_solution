@@ -75,7 +75,7 @@ public class GameEngine {
                     break;
                 }
                 case "show-types": {
-                    ShowAttractionTypesCommand showAttractionTypesCommand = new ShowAttractionTypesCommand(attractionTypes);
+                    ShowRollercoasterTypesCommand showAttractionTypesCommand = new ShowRollercoasterTypesCommand(attractionTypes);
                     showAttractionTypesCommand.execute(command);
                     break;
                 }
