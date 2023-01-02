@@ -10,7 +10,7 @@ public class ShowShopTypesCommand {
 
     public List<String> execute() {
         List<String> result = new ArrayList<>();
-        Arrays.stream(ShopType.values()).forEach(shopType -> result.add(shopType.ordinal() + " " + shopType.name() + "[" + shopType.getItemType()));
+        Arrays.stream(ShopType.values()).forEach(shopType -> result.add(shopType.name() + " [" + shopType.getItemType() + "]"));
         return result;
     }
 }

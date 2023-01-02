@@ -8,8 +8,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Shop implements Serializable, Comparable<Shop> {
     private static final long serialVersionUUID = 1L;
-    private String name;
-    private ShopType shopType;
+    private final String name;
+    private final ShopType shopType;
     private AtomicInteger itemsSold = new AtomicInteger();
 
     public Shop(String name, ShopType shopType) {

@@ -5,7 +5,7 @@ import be.pxl.rct.visitor.Visitor;
 import java.io.Serializable;
 
 public class RollerCoaster implements Comparable<RollerCoaster>, QueueArea<Visitor>, Serializable {
-
+    private static final long serialVersionUUID = 1L;
     private final String name;
     private final RollercoasterType attractionType;
 

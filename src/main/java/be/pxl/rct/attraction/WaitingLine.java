@@ -1,7 +1,5 @@
 package be.pxl.rct.attraction;
 
-import be.pxl.rct.visitor.Visitor;
-
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -15,10 +13,8 @@ public class WaitingLine<T> extends Thread  {
        this.waitingFor = waitingFor;
     }
 
-
     public synchronized void enterWaitingLine(T visitor) {
         waitingLine.add(visitor);
-        //visitor.setInWaitingLine(true);
     }
 
     @Override

@@ -9,7 +9,7 @@ public class VisitorFactory {
     private static final Random RANDOM = new Random();
     private static final Faker FAKER = new Faker();
 
-    public final Visitor createVisitor() {
+    public static Visitor createVisitor() {
         Visitor visitor = new Visitor();
         visitor.setFirstname(FAKER.name().firstName());
         int age = (int) (Math.abs(RANDOM.nextGaussian()) * 99);

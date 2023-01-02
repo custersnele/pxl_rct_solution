@@ -4,7 +4,6 @@ import be.pxl.rct.attraction.RollercoasterType;
 import be.pxl.rct.command.*;
 import be.pxl.rct.engine.task.CreateVisitorsTask;
 import be.pxl.rct.exception.InvalidCommandException;
-import be.pxl.rct.shop.ShopType;
 import be.pxl.rct.themepark.Themepark;
 
 import java.io.BufferedReader;
@@ -22,7 +21,6 @@ public class GameEngine {
     private Themepark themepark;
     private long oneDayInMillis;
     private double initialCash;
-    private Path loggingDir;
     private Path savedThemeparksDir;
     private List<RollercoasterType> attractionTypes = new ArrayList<>();
     private boolean running = true;
@@ -50,7 +48,6 @@ public class GameEngine {
             initialCash = Double.parseDouble(properties.getProperty("rct.initial_cash"));
             oneDayInMillis = Long.parseLong(properties.getProperty("rct.one_day_millis"));
             Path rollercoastersFile = Path.of(properties.getProperty("rct.rollercoasters"));
-            loggingDir = Path.of(properties.getProperty("rct.log_folder"));
             savedThemeparksDir = Path.of(properties.getProperty("rct.themeparks_folder"));
             try (BufferedReader reader = Files.newBufferedReader(rollercoastersFile)) {
                 String line = reader.readLine(); // ignore first line
@@ -80,7 +77,7 @@ public class GameEngine {
                         showShopTypesCommand.execute().forEach(System.out::println);
                     } else if (commandDetails.contains("-type rollercoaster")) {
                         ShowRollercoasterTypesCommand showAttractionTypesCommand = new ShowRollercoasterTypesCommand(attractionTypes);
-                        showAttractionTypesCommand.execute(command).forEach(System.out::println);
+                        showAttractionTypesCommand.execute(commandDetails).forEach(System.out::println);
                     } else {
                         throw new InvalidCommandException("Invalid command");
                     }

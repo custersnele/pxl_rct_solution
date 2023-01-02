@@ -30,6 +30,14 @@ public class Visitor extends Thread {
 
     private Themepark themepark;
 
+    public Visitor() {
+    }
+
+    public Visitor(String firstname, double cashAvailable) {
+        this.firstname = firstname;
+        this.cashAvailable = cashAvailable;
+    }
+
     public int getAge() {
         return age;
     }
