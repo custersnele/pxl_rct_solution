@@ -17,6 +17,14 @@ public class Shop implements Serializable, Comparable<Shop> {
         this.shopType = shopType;
     }
 
+    public ShopType getShopType() {
+        return shopType;
+    }
+
+    public String getName() {
+        return name;
+    }
+
     public boolean sells(ItemType itemType) {
         return shopType.hasItemType(itemType);
     }

@@ -6,19 +6,11 @@ import be.pxl.rct.themepark.Themepark;
 
 public class AddShopCommand {
 
-    private final Themepark themepark;
-
-    public AddShopCommand(Themepark themepark) {
-        this.themepark = themepark;
-    }
-
-    public void execute(String details) {
-        // add-attraction type name
+    public void execute(Themepark themepark, String details) {
         String[] data = details.split(" ");
         try {
-            ShopType shopType = ShopType.valueOf(data[1]);
-            String filterName = details.replace("add-shop ", "");
-            String shopName = filterName.substring(filterName.indexOf(" ") + 1).trim();
+            ShopType shopType = ShopType.valueOf(data[0]);
+            String shopName = details.substring(details.indexOf(" ") + 1).trim();
             if (shopName.isEmpty()) {
                 throw new InvalidCommandException("New shop should have a name.");
             }

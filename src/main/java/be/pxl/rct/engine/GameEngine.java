@@ -67,11 +67,11 @@ public class GameEngine {
     public void executeCommand(String command) {
         try {
             String[] data = command.split(" ");
+            String commandDetails = command.substring(command.indexOf(" ") + 1).trim();
             switch (data[0]) {
                 case "create": {
                     CreateThemeparkCommand createThemeparkCommand = new CreateThemeparkCommand(initialCash);
-                    createThemeparkCommand.execute(data[1]);
-                    this.themepark =  createThemeparkCommand.getThemepark();
+                    themepark = createThemeparkCommand.execute(commandDetails);
                     break;
                 }
                 case "show-types": {
@@ -97,17 +97,17 @@ public class GameEngine {
                 }
                 case "add-rollercoaster": {
                     AddAttractionCommand addAttractionCommand = new AddAttractionCommand(attractionTypes);
-                    addAttractionCommand.execute(themepark, command.substring(command.indexOf(" ") + 1).trim());
+                    addAttractionCommand.execute(themepark, commandDetails);
                     break;
                 }
                 case "add-shop": {
-                    AddShopCommand addShopCommand = new AddShopCommand(themepark);
-                    addShopCommand.execute(command);
+                    AddShopCommand addShopCommand = new AddShopCommand();
+                    addShopCommand.execute(themepark, commandDetails);
                     break;
                 }
                 case "set": {
                     SetCommand setCommand = new SetCommand();
-                    setCommand.execute(themepark, command);
+                    setCommand.execute(themepark, commandDetails);
                     break;
                 }
                 case "quit": {

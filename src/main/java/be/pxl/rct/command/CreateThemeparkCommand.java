@@ -5,23 +5,17 @@ import be.pxl.rct.themepark.Themepark;
 
 public class CreateThemeparkCommand {
 
-    private Themepark themepark;
-    private double initialCash;
+    private final double initialCash;
 
     public CreateThemeparkCommand(double initialCash) {
         this.initialCash = initialCash;
     }
 
-    public void execute(String name) {
-        try {
-            // TODO initial cash
-            themepark = new Themepark(name, initialCash);
-        } catch (NumberFormatException e) {
-            throw new InvalidCommandException("Create themepark failed. " + e.getMessage(), e);
+    public Themepark execute(String name) {
+        if (name == null || name.isBlank()) {
+            throw new InvalidCommandException("The new themepark should have a name.");
         }
-    }
+        return new Themepark(name.trim(), initialCash);
 
-    public Themepark getThemepark() {
-        return themepark;
     }
 }
