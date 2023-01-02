@@ -13,7 +13,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 public class GameEngine {
     private static final Path PROPERTIES = Path.of("src/main/resources/rct.properties");
@@ -25,38 +27,43 @@ public class GameEngine {
     private List<RollercoasterType> attractionTypes = new ArrayList<>();
     private boolean running = true;
 
+    public void start() {
+        // It is allowed to change the ASCII art
+        System.out.println("\n" +
+                " .----------------.  .----------------.  .----------------.     .----------------.  .----------------.  .----------------. \n" +
+                "| .--------------. || .--------------. || .--------------. |   | .--------------. || .--------------. || .--------------. |\n" +
+                "| |   ______     | || |  ____  ____  | || |   _____      | |   | |  _______     | || |     ______   | || |  _________   | |\n" +
+                "| |  |_   __ \\   | || | |_  _||_  _| | || |  |_   _|     | |   | | |_   __ \\    | || |   .' ___  |  | || | |  _   _  |  | |\n" +
+                "| |    | |__) |  | || |   \\ \\  / /   | || |    | |       | |   | |   | |__) |   | || |  / .'   \\_|  | || | |_/ | | \\_|  | |\n" +
+                "| |    |  ___/   | || |    > `' <    | || |    | |   _   | |   | |   |  __ /    | || |  | |         | || |     | |      | |\n" +
+                "| |   _| |_      | || |  _/ /'`\\ \\_  | || |   _| |__/ |  | |   | |  _| |  \\ \\_  | || |  \\ `.___.'\\  | || |    _| |_     | |\n" +
+                "| |  |_____|     | || | |____||____| | || |  |________|  | |   | | |____| |___| | || |   `._____.'  | || |   |_____|    | |\n" +
+                "| |              | || |              | || |              | |   | |              | || |              | || |              | |\n" +
+                "| '--------------' || '--------------' || '--------------' |   | '--------------' || '--------------' || '--------------' |\n" +
+                " '----------------'  '----------------'  '----------------'     '----------------'  '----------------'  '----------------' \n");
+    }
 
-    public GameEngine() throws IOException {
-        //commandEngine.addCommand("load", new LoadThemeparkCommand());
+    public void init() {
         Properties properties = new Properties();
-        properties.load(Files.newInputStream(PROPERTIES));
-        initialCash = Double.parseDouble(properties.getProperty("rct.initial_cash"));
-        oneDayInMillis = Long.parseLong(properties.getProperty("rct.one_day_millis"));
-        Path rollercoastersFile = Path.of(properties.getProperty("rct.rollercoasters"));
-        loggingDir = Path.of(properties.getProperty("rct.log_folder"));
-        savedThemeparksDir = Path.of(properties.getProperty("rct.themeparks_folder"));
-        try (BufferedReader reader = Files.newBufferedReader(rollercoastersFile)) {
-            String line = reader.readLine(); // is
-            while ((line = reader.readLine()) != null) {
-                RollercoasterType attractionType = RollercoasterMapper.map(line);
-                attractionTypes.add(attractionType);
+        try {
+            properties.load(Files.newInputStream(PROPERTIES));
+            initialCash = Double.parseDouble(properties.getProperty("rct.initial_cash"));
+            oneDayInMillis = Long.parseLong(properties.getProperty("rct.one_day_millis"));
+            Path rollercoastersFile = Path.of(properties.getProperty("rct.rollercoasters"));
+            loggingDir = Path.of(properties.getProperty("rct.log_folder"));
+            savedThemeparksDir = Path.of(properties.getProperty("rct.themeparks_folder"));
+            try (BufferedReader reader = Files.newBufferedReader(rollercoastersFile)) {
+                String line = reader.readLine(); // ignore first line
+                while ((line = reader.readLine()) != null) {
+                    RollercoasterType attractionType = RollercoasterMapper.map(line);
+                    attractionTypes.add(attractionType);
+                }
             }
         } catch (IOException e) {
             System.out.println("Error initializing the game!");
         }
     }
 
-
-    public void start() {
-        System.out.println("Type 'help' for information...");
-    }
-
-
-    /**
-     * Handles the command given the player is in currentRoom.
-     * @param command a command: take, transform, items, north, east, south or west.
-     * @return the room where the player is situated after executing the given command.
-     */
     public void executeCommand(String command) {
         try {
             String[] data = command.split(" ");
@@ -64,8 +71,7 @@ public class GameEngine {
                 case "create": {
                     CreateThemeparkCommand createThemeparkCommand = new CreateThemeparkCommand(initialCash);
                     createThemeparkCommand.execute(data[1]);
-                    Themepark themepark = createThemeparkCommand.getThemepark();
-                    this.themepark = themepark;
+                    this.themepark =  createThemeparkCommand.getThemepark();
                     break;
                 }
                 case "show-types": {
@@ -85,13 +91,13 @@ public class GameEngine {
                     break;
                 }
                 case "describe": {
-                    ShowThemeparkDetails showThemeparkDetails = new ShowThemeparkDetails(themepark);
-                    showThemeparkDetails.execute(data[0]);
+                    ShowThemeparkDetails showThemeparkDetails = new ShowThemeparkDetails();
+                    showThemeparkDetails.execute(themepark);
                     break;
                 }
                 case "add-rollercoaster": {
-                    AddAttractionCommand addAttractionCommand = new AddAttractionCommand(themepark, attractionTypes);
-                    addAttractionCommand.execute(command);
+                    AddAttractionCommand addAttractionCommand = new AddAttractionCommand(attractionTypes);
+                    addAttractionCommand.execute(themepark, command.substring(command.indexOf(" ") + 1).trim());
                     break;
                 }
                 case "add-shop": {
@@ -138,7 +144,6 @@ public class GameEngine {
     }
 
     public boolean isRunning() {
-        // TODO implement quit command
         return running;
     }
 }

@@ -4,7 +4,7 @@ import be.pxl.rct.exception.InvalidCommandException;
 import be.pxl.rct.shop.ShopType;
 import be.pxl.rct.themepark.Themepark;
 
-public class AddShopCommand implements Command<String> {
+public class AddShopCommand {
 
     private final Themepark themepark;
 
@@ -12,7 +12,6 @@ public class AddShopCommand implements Command<String> {
         this.themepark = themepark;
     }
 
-    @Override
     public void execute(String details) {
         // add-attraction type name
         String[] data = details.split(" ");

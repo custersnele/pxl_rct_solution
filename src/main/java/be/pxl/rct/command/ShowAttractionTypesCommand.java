@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public class ShowAttractionTypesCommand implements Command<String> {
+public class ShowAttractionTypesCommand {
 
     private List<RollercoasterType> attractionTypes;
 
@@ -15,7 +15,6 @@ public class ShowAttractionTypesCommand implements Command<String> {
         this.attractionTypes = attractionTypes;
     }
 
-    @Override
     public void execute(String filter) {
          attractionTypes.stream()
                  .filter(createPredicate(filter))

@@ -14,6 +14,10 @@ public class RollerCoaster implements Comparable<RollerCoaster>, QueueArea<Visit
         this.attractionType = attractionType;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public RollercoasterType getAttractionType() {
         return attractionType;
     }

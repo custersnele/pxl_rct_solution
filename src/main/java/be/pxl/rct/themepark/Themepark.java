@@ -41,7 +41,6 @@ public class Themepark implements Serializable {
         return cash;
     }
 
-    // TODO history of all payments
     public void pay(double amount) {
         cash -= amount;
     }
@@ -79,6 +78,10 @@ public class Themepark implements Serializable {
 
     public Optional<WaitingLine<Visitor>> chooseWaitingLine() {
         return waitingLines.stream().min((r1, r2) -> Integer.compare(r1.getWaitingLineSize(), r2.getWaitingLineSize()));
+    }
+
+    public List<RollerCoaster> getRollerCoasters() {
+        return rollerCoasters;
     }
 
     public void setEntranceFee(double entranceFee) {

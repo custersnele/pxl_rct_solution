@@ -13,6 +13,22 @@ public class RollercoasterType implements Serializable {
 
     private int runningTime;
 
+    public RollercoasterType(int id, RideGenre genre, double cost) {
+        this.id = id;
+        this.genre = genre;
+        this.cost = cost;
+    }
+
+    public RollercoasterType(int id, String type, RideGenre genre, double cost) {
+        this.id = id;
+        this.type = type;
+        this.genre = genre;
+        this.cost = cost;
+    }
+
+    public RollercoasterType() {
+    }
+
     public int getId() {
         return id;
     }

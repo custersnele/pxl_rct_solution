@@ -3,7 +3,7 @@ package be.pxl.rct.command;
 import be.pxl.rct.exception.InvalidCommandException;
 import be.pxl.rct.themepark.Themepark;
 
-public class CreateThemeparkCommand implements Command<String> {
+public class CreateThemeparkCommand {
 
     private Themepark themepark;
     private double initialCash;
@@ -12,7 +12,6 @@ public class CreateThemeparkCommand implements Command<String> {
         this.initialCash = initialCash;
     }
 
-    @Override
     public void execute(String name) {
         try {
             // TODO initial cash
