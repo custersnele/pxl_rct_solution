@@ -74,14 +74,15 @@ public class GameEngine {
                     themepark = createThemeparkCommand.execute(commandDetails);
                     break;
                 }
-                case "show-types": {
-                    ShowRollercoasterTypesCommand showAttractionTypesCommand = new ShowRollercoasterTypesCommand(attractionTypes);
-                    showAttractionTypesCommand.execute(command);
-                    break;
-                }
-                case "show-shops": {
-                    for (ShopType shop : ShopType.values()) {
-                        System.out.println(shop.ordinal() + " " + shop.name() + "[" + shop.getItemType() + "]");
+                case "show": {
+                    if (commandDetails.contains("-type shop")) {
+                        ShowShopTypesCommand showShopTypesCommand = new ShowShopTypesCommand();
+                        showShopTypesCommand.execute().forEach(System.out::println);
+                    } else if (commandDetails.contains("-type rollercoaster")) {
+                        ShowRollercoasterTypesCommand showAttractionTypesCommand = new ShowRollercoasterTypesCommand(attractionTypes);
+                        showAttractionTypesCommand.execute(command).forEach(System.out::println);
+                    } else {
+                        throw new InvalidCommandException("Invalid command");
                     }
                     break;
                 }

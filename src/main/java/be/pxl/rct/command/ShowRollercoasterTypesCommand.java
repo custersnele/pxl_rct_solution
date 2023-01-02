@@ -57,13 +57,16 @@ public class ShowRollercoasterTypesCommand {
         try {
             Predicate<RollercoasterType> filter = a -> true;
             if (values.containsKey("-min-cost")) {
-                filter = filter.and(a -> a.getCost() >= Double.parseDouble(values.get("-min-cost")));
+                double value = Double.parseDouble(values.get("-min-cost"));
+                filter = filter.and(a -> a.getCost() >= value);
             }
             if (values.containsKey("-max-cost")) {
-                filter = filter.and(a -> a.getCost() <= Double.parseDouble(values.get("-max-cost")));
+                double value = Double.parseDouble(values.get("-max-cost"));
+                filter = filter.and(a -> a.getCost() <= value);
             }
             if (values.containsKey("-ride")) {
-                filter = filter.and(a -> a.getGenre().equals(RideGenre.valueOf(values.get("-ride"))));
+                RideGenre genre = RideGenre.valueOf(values.get("-ride"));
+                filter = filter.and(a -> a.getGenre().equals(genre));
             }
             return filter;
         } catch (IllegalArgumentException e) {
