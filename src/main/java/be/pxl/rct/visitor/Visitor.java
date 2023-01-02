@@ -1,6 +1,5 @@
 package be.pxl.rct.visitor;
 
-import be.pxl.rct.attraction.RollerCoaster;
 import be.pxl.rct.attraction.WaitingLine;
 import be.pxl.rct.exception.UnsufficientCashException;
 import be.pxl.rct.shop.ItemType;

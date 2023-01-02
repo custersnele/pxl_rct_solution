@@ -33,6 +33,5 @@ public class ThemeparkAddAttractionTest {
     public void anExceptionIsThrownWhenTheRollercoasterCannotBePaid() {
         Themepark themepark = new Themepark("test park", 1000);
         assertThrows(UnsufficientCashException.class, () -> themepark.addAttraction("first attraction", new RollercoasterType(5, RideGenre.GENTLE_RIDE, 1500)));
-
     }
 }
