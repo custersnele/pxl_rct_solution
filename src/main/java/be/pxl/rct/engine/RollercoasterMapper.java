@@ -19,11 +19,9 @@ public class RollercoasterMapper {
         Rating nauseaRating = Rating.valueOf(data[6].toUpperCase());
         double nausea = Double.parseDouble(data[5]);
         attractionType.setNausea(new Specification(nausea, nauseaRating));
-
         attractionType.setCost(Double.parseDouble(data[7]));
         attractionType.setPassengers(Integer.parseInt(data[8]));
-        // TODO update running time
-        attractionType.setRunningTime(25);
+        attractionType.setRunningTime(Integer.parseInt(data[9]));
         return attractionType;
     }
 }

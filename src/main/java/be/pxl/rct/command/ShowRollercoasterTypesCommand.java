@@ -13,7 +13,7 @@ import java.util.function.Predicate;
 
 public class ShowRollercoasterTypesCommand {
 
-    private List<RollercoasterType> attractionTypes;
+    private final List<RollercoasterType> attractionTypes;
 
     public ShowRollercoasterTypesCommand(List<RollercoasterType> attractionTypes) {
         this.attractionTypes = attractionTypes;
@@ -39,16 +39,13 @@ public class ShowRollercoasterTypesCommand {
     private Comparator<RollercoasterType> createComparator(Map<String, String> filter) {
         if (filter.containsKey("-sorted")) {
             String sort = filter.get("-sorted");
-            switch (sort) {
-                case "name":
-                    return (t1, t2) -> t1.getType().compareTo(t2.getType());
-                case "id":
-                    return (t1, t2) -> Integer.compare(t1.getId(), t2.getId());
-                default:
-                    throw new InvalidCommandException("Invalid sorting...");
-            }
+            return switch (sort) {
+                case "name" -> Comparator.comparing(RollercoasterType::getType);
+                case "id" -> Comparator.comparingInt(RollercoasterType::getId);
+                default -> throw new InvalidCommandException("Invalid sorting...");
+            };
         } else {
-            return (t1, t2) -> Integer.compare(t1.getId(), t2.getId());
+            return Comparator.comparingInt(RollercoasterType::getId);
         }
     }
 
